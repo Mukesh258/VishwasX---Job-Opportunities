@@ -15,6 +15,7 @@
   <img src="https://img.shields.io/badge/Auth-Firebase_Auth-DD2C00?style=for-the-badge&logo=firebase&logoColor=white" />
   <img src="https://img.shields.io/badge/ML-scikit--learn_+_PyMuPDF-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white" />
   <img src="https://img.shields.io/badge/Encryption-AES--256--CBC-000000?style=for-the-badge&logo=letsencrypt&logoColor=white" />
+  <img src="https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge" />
 </p>
 
 ---
