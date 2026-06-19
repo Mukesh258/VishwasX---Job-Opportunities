@@ -1,0 +1,278 @@
+// Export utilities for PDF and CSV formats
+import type { UserProfile, RoadmapMonth, SkillGap } from "./mockData";
+
+// Generate PDF content as HTML
+export const generateRoadmapPDF = (
+  profile: UserProfile,
+  roadmap: RoadmapMonth[],
+  progress: Record<string, boolean>
+): string => {
+  const completedTasks = Object.values(progress).filter(Boolean).length;
+  const totalTasks = roadmap.reduce((sum, month) => sum + month.tasks.length, 0);
+  const overallProgress = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+
+  return `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="UTF-8">
+      <title>Learning Roadmap - ${profile.desiredRole}</title>
+      <style>
+        body { font-family: Arial, sans-serif; margin: 40px; color: #333; }
+        h1 { color: #6366f1; border-bottom: 3px solid #6366f1; padding-bottom: 10px; }
+        h2 { color: #8b5cf6; margin-top: 30px; }
+        .profile { background: #f3f4f6; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+        .profile-item { margin: 8px 0; }
+        .progress-bar { width: 100%; height: 20px; background: #e5e7eb; border-radius: 10px; overflow: hidden; margin: 10px 0; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #6366f1, #8b5cf6); width: ${overallProgress}%; }
+        .month { margin-bottom: 25px; page-break-inside: avoid; }
+        .month-header { background: #f0f4ff; padding: 10px; border-left: 4px solid #6366f1; margin-bottom: 10px; }
+        .task { margin: 8px 0; padding: 8px; background: #fafafa; border-left: 3px solid #e5e7eb; }
+        .task.completed { background: #f0fdf4; border-left-color: #22c55e; text-decoration: line-through; color: #999; }
+        .resources { margin-top: 10px; font-size: 12px; }
+        .resource-link { display: inline-block; background: #e0e7ff; padding: 4px 8px; margin: 4px 4px 4px 0; border-radius: 4px; }
+        .summary { background: #f9fafb; padding: 15px; border-radius: 8px; margin-top: 30px; }
+        .summary-item { display: inline-block; margin-right: 30px; }
+        .summary-value { font-size: 24px; font-weight: bold; color: #6366f1; }
+        .summary-label { font-size: 12px; color: #666; }
+        footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e7eb; font-size: 12px; color: #999; }
+      </style>
+    </head>
+    <body>
+      <h1>🎯 Learning Roadmap</h1>
+      <h2>Career Plan for ${profile.desiredRole}</h2>
+      
+      <div class="profile">
+        <div class="profile-item"><strong>Previous Role:</strong> ${profile.previousRole}</div>
+        <div class="profile-item"><strong>Years of Experience:</strong> ${profile.yearsExperience} years</div>
+        <div class="profile-item"><strong>Career Break:</strong> ${profile.careerBreakDuration}</div>
+        <div class="profile-item"><strong>Current Skills:</strong> ${profile.currentSkills.join(", ")}</div>
+        <div class="profile-item"><strong>Education:</strong> ${profile.educationLevel}</div>
+      </div>
+
+      <h2>Overall Progress</h2>
+      <div class="progress-bar">
+        <div class="progress-fill"></div>
+      </div>
+      <p><strong>${completedTasks}/${totalTasks}</strong> tasks completed (${overallProgress}%)</p>
+
+      ${roadmap.map((month, idx) => {
+        const monthTasks = month.tasks;
+        const completedMonthTasks = monthTasks.filter((_, i) => progress[`${month.month}-${i}`]).length;
+        const monthProgress = monthTasks.length > 0 ? Math.round((completedMonthTasks / monthTasks.length) * 100) : 0;
+
+        return `
+          <div class="month">
+            <div class="month-header">
+              <strong>Month ${month.month}: ${month.title}</strong> - ${monthProgress}% Complete
+            </div>
+            ${monthTasks.map((task, i) => `
+              <div class="task ${progress[`${month.month}-${i}`] ? 'completed' : ''}">
+                ${progress[`${month.month}-${i}`] ? '✓' : '○'} ${task}
+              </div>
+            `).join('')}
+            ${month.resources.length > 0 ? `
+              <div class="resources">
+                <strong>Resources:</strong>
+                ${month.resources.map(r => `
+                  <div class="resource-link">${r.name} (${r.platform})</div>
+                `).join('')}
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }).join('')}
+
+      <div class="summary">
+        <h2>Summary</h2>
+        <div class="summary-item">
+          <div class="summary-value">${completedTasks}</div>
+          <div class="summary-label">Completed Tasks</div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-value">${totalTasks - completedTasks}</div>
+          <div class="summary-label">Remaining Tasks</div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-value">${overallProgress}%</div>
+          <div class="summary-label">Overall Progress</div>
+        </div>
+      </div>
+
+      <footer>
+        <p>Generated by VishwasX on ${new Date().toLocaleDateString()}</p>
+        <p>Your personalized career roadmap</p>
+      </footer>
+    </body>
+    </html>
+  `;
+};
+
+// Generate Career Analysis PDF
+export const generateCareerAnalysisPDF = (
+  profile: UserProfile,
+  skillGap: SkillGap
+): string => {
+  return `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="UTF-8">
+      <title>Career Analysis Report</title>
+      <style>
+        body { font-family: Arial, sans-serif; margin: 40px; color: #333; }
+        h1 { color: #6366f1; border-bottom: 3px solid #6366f1; padding-bottom: 10px; }
+        h2 { color: #8b5cf6; margin-top: 30px; }
+        .section { margin-bottom: 25px; page-break-inside: avoid; }
+        .section-header { background: #f0f4ff; padding: 10px; border-left: 4px solid #6366f1; margin-bottom: 10px; }
+        .item { margin: 10px 0; padding: 10px; background: #fafafa; border-radius: 4px; }
+        .skill-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+        .skill-tag { background: #e0e7ff; color: #4f46e5; padding: 6px 12px; border-radius: 20px; font-size: 12px; }
+        .gap-tag { background: #fee2e2; color: #dc2626; padding: 6px 12px; border-radius: 20px; font-size: 12px; }
+        .strength { background: #f0fdf4; border-left: 3px solid #22c55e; }
+        .weakness { background: #fef2f2; border-left: 3px solid #ef4444; }
+        .recommendation { background: #eff6ff; border-left: 3px solid #3b82f6; padding: 12px; margin: 10px 0; }
+        footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e7eb; font-size: 12px; color: #999; }
+      </style>
+    </head>
+    <body>
+      <h1>📊 Career Analysis Report</h1>
+      <h2>Comprehensive Career Assessment</h2>
+
+      <div class="section">
+        <div class="section-header"><strong>Profile Overview</strong></div>
+        <div class="item">
+          <strong>Current Role:</strong> ${profile.previousRole}<br>
+          <strong>Target Role:</strong> ${profile.desiredRole}<br>
+          <strong>Experience:</strong> ${profile.yearsExperience} years<br>
+          <strong>Career Break:</strong> ${profile.careerBreakDuration}<br>
+          <strong>Education:</strong> ${profile.educationLevel}
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header"><strong>Current Strengths</strong></div>
+        <div class="skill-list">
+          ${profile.currentSkills.map(skill => `
+            <span class="skill-tag">${skill}</span>
+          `).join('')}
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header"><strong>Skill Gaps to Address</strong></div>
+        <div class="skill-list">
+          ${skillGap.missingSkills.map(skill => `
+            <span class="gap-tag">${skill}</span>
+          `).join('')}
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header"><strong>Key Recommendations</strong></div>
+        <div class="recommendation">
+          <strong>1. Priority Skills:</strong> Focus on acquiring ${skillGap.missingSkills.slice(0, 3).join(", ")} as these are most critical for your target role.
+        </div>
+        <div class="recommendation">
+          <strong>2. Timeline:</strong> Plan for a 3-month intensive learning period to bridge the skill gap effectively.
+        </div>
+        <div class="recommendation">
+          <strong>3. Learning Strategy:</strong> Combine online courses, hands-on projects, and mentorship to accelerate your learning.
+        </div>
+        <div class="recommendation">
+          <strong>4. Networking:</strong> Connect with professionals in your target field to understand industry trends and opportunities.
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header"><strong>Career Path Options</strong></div>
+        <div class="item">
+          <strong>Direct Transition:</strong> Move directly to ${profile.desiredRole} after acquiring key skills<br>
+          <strong>Intermediate Step:</strong> Consider related roles that bridge your current and target positions<br>
+          <strong>Returnship Programs:</strong> Look for structured returnship programs designed for career returners
+        </div>
+      </div>
+
+      <footer>
+        <p>Generated by VishwasX on ${new Date().toLocaleDateString()}</p>
+        <p>This report is personalized based on your profile and career goals</p>
+      </footer>
+    </body>
+    </html>
+  `;
+};
+
+// Export to CSV
+export const exportToCSV = (data: Record<string, unknown>[], filename: string): void => {
+  if (data.length === 0) return;
+
+  const headers = Object.keys(data[0]);
+  const csv = [
+    headers.join(","),
+    ...data.map(row =>
+      headers.map(header => {
+        const value = row[header];
+        if (typeof value === "string" && value.includes(",")) {
+          return `"${value}"`;
+        }
+        return value;
+      }).join(",")
+    ),
+  ].join("\n");
+
+  downloadFile(csv, filename, "text/csv");
+};
+
+// Download file helper
+export const downloadFile = (content: string, filename: string, mimeType: string): void => {
+  const blob = new Blob([content], { type: mimeType });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+};
+
+// Export roadmap as PDF
+export const exportRoadmapAsPDF = (
+  profile: UserProfile,
+  roadmap: RoadmapMonth[],
+  progress: Record<string, boolean>
+): void => {
+  const html = generateRoadmapPDF(profile, roadmap, progress);
+  const printWindow = window.open("", "", "width=800,height=600");
+  if (printWindow) {
+    printWindow.document.write(html);
+    printWindow.document.close();
+    printWindow.print();
+  }
+};
+
+// Export career analysis as PDF
+export const exportCareerAnalysisAsPDF = (
+  profile: UserProfile,
+  skillGap: SkillGap
+): void => {
+  const html = generateCareerAnalysisPDF(profile, skillGap);
+  const printWindow = window.open("", "", "width=800,height=600");
+  if (printWindow) {
+    printWindow.document.write(html);
+    printWindow.document.close();
+    printWindow.print();
+  }
+};
+
+// Export profile as JSON
+export const exportProfileAsJSON = (profile: UserProfile): void => {
+  const json = JSON.stringify(profile, null, 2);
+  downloadFile(json, `profile-${Date.now()}.json`, "application/json");
+};
+
+// Export progress as JSON
+export const exportProgressAsJSON = (progress: Record<string, boolean>): void => {
+  const json = JSON.stringify(progress, null, 2);
+  downloadFile(json, `progress-${Date.now()}.json`, "application/json");
+};

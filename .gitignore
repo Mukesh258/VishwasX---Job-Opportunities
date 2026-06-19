@@ -53,8 +53,9 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
-lib64/
+# lib/ is too broad, it ignored frontend/src/lib/
+/venv/lib/
+/venv/lib64/
 parts/
 sdist/
 var/
