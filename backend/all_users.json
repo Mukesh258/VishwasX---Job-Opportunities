@@ -1,0 +1,41 @@
+[
+  {
+    "_id": "69c5ab7c9f6099e74e6de23a",
+    "name": "U. Mukesh",
+    "email": "free.space2303@gmail.com",
+    "phone": "+919179184920",
+    "firebaseUID": "TZzZwxRGXCS5bA6evMNRi6viLQp1",
+    "careerBreakDuration": "N/A",
+    "careerStage": "Student / Fresher",
+    "currentSkills": [
+      "C",
+      "C++",
+      "Python",
+      "JavaScript",
+      "Java"
+    ],
+    "desiredRole": "ASE",
+    "educationLevel": "Bachelor's Degree",
+    "previousRole": "Software Developer",
+    "yearsExperience": 0
+  },
+  {
+    "_id": "69c5ad819f6099e74e6de23b",
+    "name": "Test User",
+    "email": "test_jetski_456@example.com",
+    "phone": "+911234567890",
+    "firebaseUID": "wEw8s8vDS1Z4op9rCpEzolGN9lJ3",
+    "careerBreakDuration": "1 year",
+    "careerStage": "Career Restart",
+    "currentSkills": [
+      "Python",
+      "JavaScript",
+      "HTML",
+      "CSS"
+    ],
+    "desiredRole": "Frontend Developer",
+    "educationLevel": "High School",
+    "previousRole": "Student",
+    "yearsExperience": 0
+  }
+]

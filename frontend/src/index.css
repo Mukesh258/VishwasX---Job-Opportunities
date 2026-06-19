@@ -1,0 +1,139 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Playfair+Display:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Professional neutral palette */
+    --background: 210 22% 97%;
+    --foreground: 222 19% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 224 23% 12%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 23% 12%;
+
+    --primary: 222 19% 10%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 215 16% 25%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 210 14% 92%;
+    --muted-foreground: 215 10% 40%;
+
+    --accent: 210 14% 92%;
+    --accent-foreground: 222 19% 10%;
+
+    --destructive: 0 84% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 214 16% 84%;
+    --input: 214 16% 84%;
+    --ring: 222 19% 10%;
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 220 40% 98%;
+    --sidebar-foreground: 224 23% 12%;
+    --sidebar-primary: 176 70% 40%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 266 82% 62%;
+    --sidebar-accent-foreground: 224 23% 12%;
+    --sidebar-border: 220 20% 86%;
+    --sidebar-ring: 176 70% 40%;
+
+    --font-display: 'Playfair Display', serif;
+    --font-body: 'DM Sans', sans-serif;
+
+    --gradient-hero: radial-gradient(1200px circle at 20% 10%, hsl(220 25% 92% / 0.9), transparent 55%),
+      radial-gradient(900px circle at 80% 30%, hsl(210 20% 90% / 0.9), transparent 60%),
+      radial-gradient(700px circle at 45% 85%, hsl(215 18% 91% / 0.9), transparent 55%);
+    --gradient-primary: linear-gradient(135deg, hsl(222 19% 10%), hsl(215 16% 18%));
+    --gradient-secondary: linear-gradient(135deg, hsl(215 16% 25%), hsl(215 16% 18%));
+    --gradient-warm: linear-gradient(135deg, hsl(222 19% 10% / 0.10), hsl(215 16% 25% / 0.08));
+
+    --shadow-card: 0 1px 3px hsl(224 23% 12% / 0.06), 0 4px 12px hsl(224 23% 12% / 0.04);
+    --shadow-card-hover: 0 4px 12px hsl(224 23% 12% / 0.10), 0 8px 24px hsl(224 23% 12% / 0.06);
+    --shadow-elevated: 0 8px 30px hsl(224 23% 12% / 0.12);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-body);
+  }
+
+  body::before,
+  body::after {
+    content: "";
+    position: fixed;
+    inset: -40%;
+    z-index: -1;
+    pointer-events: none;
+    transform: translateZ(0);
+  }
+
+  body::before {
+    background: var(--gradient-hero);
+    filter: blur(18px);
+    opacity: 0.9;
+    animation: ambient-shift 16s ease-in-out infinite alternate;
+  }
+
+  body::after {
+    background: radial-gradient(700px circle at 50% 50%, hsl(0 0% 100% / 0.35), transparent 60%);
+    opacity: 0.45;
+    animation: ambient-float 22s ease-in-out infinite;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+  }
+}
+
+@layer base {
+  @keyframes ambient-shift {
+    0% { transform: translate3d(-2%, -1%, 0) scale(1); }
+    50% { transform: translate3d(2%, 1%, 0) scale(1.02); }
+    100% { transform: translate3d(1%, -2%, 0) scale(1.03); }
+  }
+
+  @keyframes ambient-float {
+    0% { transform: translate3d(0%, 0%, 0) scale(1); }
+    50% { transform: translate3d(-1%, 1.5%, 0) scale(1.01); }
+    100% { transform: translate3d(1.5%, -1%, 0) scale(1.02); }
+  }
+}
+
+@layer utilities {
+  .gradient-hero {
+    background: var(--gradient-hero);
+  }
+  .gradient-primary {
+    background: var(--gradient-primary);
+  }
+  .gradient-secondary {
+    background: var(--gradient-secondary);
+  }
+  .gradient-warm {
+    background: var(--gradient-warm);
+  }
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+  .shadow-card-hover {
+    box-shadow: var(--shadow-card-hover);
+  }
+  .shadow-elevated {
+    box-shadow: var(--shadow-elevated);
+  }
+}

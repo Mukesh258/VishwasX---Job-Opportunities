@@ -1,0 +1,23 @@
+{
+  "success": true,
+  "message": "Signed in successfully",
+  "user": {
+    "email": "free.space2303@gmail.com",
+    "name": "U. Mukesh"
+  },
+  "profile": {
+    "careerStage": "Student / Fresher",
+    "previousRole": "Software Developer",
+    "yearsExperience": 0,
+    "careerBreakDuration": "N/A",
+    "currentSkills": [
+      "C",
+      "C++",
+      "Python",
+      "JavaScript",
+      "Java"
+    ],
+    "desiredRole": "ASE",
+    "educationLevel": "Bachelor's Degree"
+  }
+}
